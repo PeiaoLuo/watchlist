@@ -61,9 +61,12 @@ def initdb(drop):
 # --------example of static settings------------
 @app.route('/')
 def index():
-    user = User.query.first()
+    # user = User.query.first()
     movies = Movie.query.all()
-    return render_template('index.html', user=user, movies=movies)
+    return render_template('index.html', movies=movies)
+    # return render_template('index.html', user=user, movies=movies)
+    # use if context processor disabled
+    
 # --------example of static settings------------
 
 # --------example of dynamic settings------------
@@ -107,3 +110,22 @@ def forge():
     
     db.session.commit()
     click.echo('Done.')
+    
+#-----------------error dealing------------------- 
+@app.errorhandler(404)
+def page_not_found(e):
+    # user = User.query.first()
+    return render_template('404.html'), 404
+    # return render_template('404.html', user=user), 404 
+    # use if context_processor disabled
+
+#-----------------error dealing-------------------    
+
+#-----------------context processor----------------
+# this will pass the varible returned by the function into other place where
+# render_template is used
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+#-----------------context processor----------------
