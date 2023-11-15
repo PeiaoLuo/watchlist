@@ -213,7 +213,7 @@ login_manager = LoginManager(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = User.query.get(int(user_id))
+    user = db.session.query(User).get(int(user_id))
     return user
 login_manager.login_view = 'login'
 
