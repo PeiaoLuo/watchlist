@@ -1,5 +1,7 @@
 import unittest
-from app import User, Movie, app, db, forge, initdb
+from	watchlist	import	app,	db
+from	watchlist.models	import	Movie,	User
+from	watchlist.commands	import	forge,	initdb
 
 HOSTNAME = "localhost"
 PORT = 3306
@@ -14,6 +16,7 @@ class WatchlistTestCse(unittest.TestCase):
             SQLALCHEMY_DATABASE_URI=f"mysql+pymysql://{USERNAME}:{PASSWD}@{HOSTNAME}/{DATABASE}?charset=utf8mb4"
         )
         with app.app_context():
+            db.drop_all()
             db.create_all()
             user = User(name='Test', username='test')
             user.set_password('123')
@@ -174,7 +177,7 @@ class WatchlistTestCse(unittest.TestCase):
         self.login()
         response = self.client.get('/logout', follow_redirects=True)
         data = response.get_data(as_text=True)
-        self.assertIn('Bye.', data)
+        self.assertIn('Goodbye.', data)
         self.assertNotIn('Logout', data)
         self.assertNotIn('Settings', data)
         self.assertNotIn('Delete', data)
